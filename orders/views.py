@@ -1,6 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template import loader
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Project 3: TODO")
+    template = loader.get_template('orders/index.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def menu(request):
+    template = loader.get_template('orders/menu.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
