@@ -6,8 +6,10 @@
     var availableToppings = {{ availableToppings }}
     renderItem(itemData[0].fields);
     renderToppingsForm(availableToppings);
+    addAddToOrderButton();
   }
   document.addEventListener("DOMContentLoaded", init);
+   var itemData = {{ item }}
 </script>
 <div class="container" id="itemContainerSection">
 </div>

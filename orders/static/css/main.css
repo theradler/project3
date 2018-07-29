@@ -540,3 +540,6 @@ ul {
 .form-check-label {
 padding-left: 15px;
 }
+.form-horizontal .checkbox {
+    margin-bottom: 0;
+}
