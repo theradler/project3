@@ -10,5 +10,7 @@ urlpatterns = [
     path('menu/', views.menu, name="menu"),
     path('access/', views.access, name="access"),
     path('register/', views.register, name="register"),
-    path('login/', views.login, name="login")
+    path('login/', views.login, name="login"),
+    path('customizeOrder/<int:item_id>/', views.customizeOrder, name="customizeOrder")
+
 ]

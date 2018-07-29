@@ -30,7 +30,6 @@ title.appendChild(document.createTextNode(toCamelCase(categoryName)));
 menuItemSection.id = (categoryName.replace(/ /g,'') + "ItemSection");
 menuItemSection.setAttribute('class',"card-columns");
 
-
 //createLoadElement
 headerDiv.appendChild(title);
 headerDiv.appendChild(divider);
@@ -41,6 +40,7 @@ element.appendChild(menuItemSection);
 function loadMenuItems(menuData) {
 for (i = 0; i < menuData.length; i++) {
   var tempItem = menuData[i].fields;
+  var itemId = menuData[i].pk;
   //get correct meny div
   var menuDiv = document.getElementById((tempItem.category.replace(/ /g,'') + "ItemSection"));
 
@@ -67,12 +67,25 @@ for (i = 0; i < menuData.length; i++) {
    largePriceValue.setAttribute("class","text-truncate");
    largePriceValue.appendChild(document.createTextNode("Large " + toCamelCase(tempItem.name)));
 
+   //CreateAddToOrderButton
+   var addToOrderForm = document.createElement('form');
+   var addToOrderButton = document.createElement('button');
+   //create form that will redirect to customizeOrder page
+   addToOrderForm.setAttribute('method','get')
+   addToOrderForm.setAttribute('action', ("/customizeOrder/" + itemId));
+
+
+   //create button and add it form
+   addToOrderButton.setAttribute('type','submit');
+   addToOrderButton.appendChild(document.createTextNode('Add to Order'))
+   addToOrderForm.appendChild(addToOrderButton);
+
   //append Price object to col body
   cardBody.appendChild(smallPriceSpan);
   cardBody.appendChild(smallPriceValue);
   cardBody.appendChild(largePriceSpan);
   cardBody.appendChild(largePriceValue);
-
+  cardBody.appendChild(addToOrderForm);
   menuDiv.appendChild(cardBody);
 }
 }

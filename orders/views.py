@@ -51,7 +51,6 @@ def register(request):
             return HttpResponse(template.render(context,request))
 
 def login(request):
-    print('received login request')
     if request.method == 'POST':
         loginForm = AuthenticationForm(data=request.POST)
         if(loginForm.is_valid()):
@@ -70,3 +69,18 @@ def login(request):
 
                        }
             return HttpResponse(template.render(context, request))
+
+def customizeOrder(request, item_id):
+    baseItemDetails = models.Menu.objects.get(pk=item_id)
+    category = baseItemDetails.category
+    if("pizza" in baseItemDetails.category):
+        category = "pizza"
+    item = mark_safe(serializers.serialize("json", models.Menu.objects.filter(pk=item_id)))
+    availableToppings = mark_safe(serializers.serialize("json", models.Toppings.objects.filter(category=category)))
+    template = loader.get_template('orders/customizeOrder.html')
+    context = {
+        'item': item,
+        'availableToppings': availableToppings
+    }
+
+    return HttpResponse(template.render(context, request))

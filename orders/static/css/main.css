@@ -513,6 +513,12 @@ margin-bottom: 100px;
 margin-top: 100px;
 margin-bottom: 100px;
 }
+
+#itemContainerSection {
+margin-top: 100px;
+margin-bottom: 100px;
+}
+
 #registerSection {
 outline-style: outset;
 border:2px solid black;
@@ -530,4 +536,7 @@ list-style-type: none;
 
 ul {
   list-style-type: none;
+}
+.form-check-label {
+padding-left: 15px;
 }

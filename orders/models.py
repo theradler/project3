@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 class Menu(models.Model):
@@ -13,4 +13,11 @@ class Menu(models.Model):
 
 
 class Toppings(models.Model):
-    category = models.CharField(max_length=30)
+    category = models.CharField(max_length=30, null=False, blank=False)
+    item_name = models.CharField(max_length=30, null=True, default=None, blank=True)
+    name = models.CharField(max_length=30)
+    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    class Meta:
+        verbose_name = _("Toppings")
+        verbose_name_plural = _("Toppings")
