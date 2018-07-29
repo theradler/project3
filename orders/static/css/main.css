@@ -508,3 +508,26 @@ margin-bottom: 100px;
 .card-columns {
     column-count: 3;
 }
+
+#bodyAccessSection {
+margin-top: 100px;
+margin-bottom: 100px;
+}
+#registerSection {
+outline-style: outset;
+border:2px solid black;
+margin:5px;
+text-align: left;
+vertical-
+}
+#accessErrors {
+width:50%;
+padding:5px;
+}
+#errorList {
+list-style-type: none;
+}
+
+ul {
+  list-style-type: none;
+}

@@ -1,0 +1,40 @@
+{% extends "orders\base.html" %} {% block content %}
+
+
+<div class="container-fluid" id="bodyAccessSection">
+<div class="row">
+    <div class="col" id="registerSection">
+        Register
+        {% if userCreationForm.errors %}
+        {% for error, field in userCreationForm.errors.items %}
+            <div class="alert alert-danger" id="accessErrors">
+                <strong>{{ field|escape }}</strong>
+            </div>
+        {% endfor %}
+{% endif %}
+
+    <form method="post" action="/register/" class="form-group">
+          {% csrf_token %}
+           {{ userCreationForm.username.label }}
+           {{ userCreationForm.username  }}
+        <br>
+           {{ userCreationForm.password1.label }}
+           {{ userCreationForm.password1 }}
+        <br>
+           {{ userCreationForm.password2.label }}
+           {{ userCreationForm.password2 }}
+        <br>
+        <button type="submit" >Register</button>
+    </form>
+    </div>
+    <div class="col" style="background:green" id="loginSection">
+        Log In
+        <form method="post">
+            {% csrf_token %}
+            {{ loginForm.as_p }}
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}
