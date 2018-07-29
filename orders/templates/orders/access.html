@@ -29,7 +29,14 @@
     </div>
     <div class="col" style="background:green" id="loginSection">
         Log In
-        <form method="post">
+         {% if loginForm.errors %}
+         {% for error, field in loginForm.errors.items %}
+            <div class="alert alert-danger" id="accessErrors">
+                <strong>{{ field|escape }}</strong>
+            </div>
+        {% endfor %}
+{% endif %}
+            <form method="post" action="/login/">
             {% csrf_token %}
             {{ loginForm.as_p }}
             <button type="submit">Login</button>

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.template import loader
 from django.utils.safestring import mark_safe
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core import serializers
 from orders import models
@@ -32,26 +32,41 @@ def access(request):
     return HttpResponse(template.render(context,request))
 
 def register(request):
-    print("This shit is working")
     if request.method == 'POST':
-        print("This shit is POST")
-        form = UserCreationForm(request.POST)
-        if (form.is_valid()):
-            print("this shit form is valid")
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
+        userCreationForm = UserCreationForm(request.POST)
+        if (userCreationForm.is_valid()):
+            userCreationForm.save()
+            username = userCreationForm.cleaned_data.get('username')
+            raw_password = userCreationForm.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            print("this shit is attempting to redirect")
+            auth_login(request, user)
             return menu(request)
         else:
             template = loader.get_template('orders/access.html')
             loginForm = AuthenticationForm()
-            print('Form was not valid')
-            context = { 'userCreationForm': form,
+            context = { 'userCreationForm': userCreationForm,
                         'loginForm': loginForm
 
             }
             return HttpResponse(template.render(context,request))
 
+def login(request):
+    print('received login request')
+    if request.method == 'POST':
+        loginForm = AuthenticationForm(data=request.POST)
+        if(loginForm.is_valid()):
+            username = loginForm.cleaned_data.get('username')
+            raw_password = loginForm.cleaned_data.get('password')
+            user = authenticate(username=username,password=raw_password)
+            auth_login(request, user)
+            return menu(request)
+        else:
+            print("invalidRequest")
+            print(loginForm.errors)
+            template = loader.get_template('orders/access.html')
+            userCreationForm = UserCreationForm()
+            context = {'userCreationForm': userCreationForm,
+                       'loginForm': loginForm
+
+                       }
+            return HttpResponse(template.render(context, request))

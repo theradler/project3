@@ -9,6 +9,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('menu/', views.menu, name="menu"),
     path('access/', views.access, name="access"),
-    path('register/', views.register, name="register")
-
+    path('register/', views.register, name="register"),
+    path('login/', views.login, name="login")
 ]
