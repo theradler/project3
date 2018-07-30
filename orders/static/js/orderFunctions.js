@@ -41,12 +41,12 @@ function renderToppingsForm(item) {
   var div = document.createElement('form');
   div.setAttribute('class', 'form-check');
 
-//loop through all toppings delived to page and render them
+  //loop through all toppings delived to page and render them
   for (i = 0; i < item.length; i++) {
     div = renderToppingsOption(item[i].fields.name, div)
   }
- itemSection.appendChild(div);
- itemSection.appendChild(hr);
+  itemSection.appendChild(div);
+  itemSection.appendChild(hr);
 }
 
 function buildSizeForm(cost, nameOfOption) {
@@ -55,8 +55,8 @@ function buildSizeForm(cost, nameOfOption) {
   var input = document.createElement('input');
   input.setAttribute('type', 'radio');
   input.setAttribute('name', nameOfOption);
-  input.setAttribute('value',cost);
-  input.setAttribute('class',"sizeForm");
+  input.setAttribute('value', cost);
+  input.setAttribute('class', "sizeForm");
   var label = document.createElement('label');
   label.setAttribute('class', 'form-check-label');
   label.setAttribute('for', nameOfOption);
@@ -68,7 +68,7 @@ function buildSizeForm(cost, nameOfOption) {
   return div
 }
 
-function renderToppingsOption(nameOfOption,div) {
+function renderToppingsOption(nameOfOption, div) {
   // var div = document.createElement('div');
   // div.setAttribute('class', 'form-check');
 
@@ -91,16 +91,16 @@ function renderToppingsOption(nameOfOption,div) {
 }
 
 function addAddToOrderButton() {
-var itemSection = document.getElementById('itemContainerSection');
+  var itemSection = document.getElementById('itemContainerSection');
 
-//create button
-var button = document.createElement('button');
-button.setAttribute('type','submit');
-button.setAttribute('class',"btn btn-primary");
-button.appendChild(document.createTextNode("Add to Order"));
-button.setAttribute('onclick',"addToOrder()")
+  //create button
+  var button = document.createElement('button');
+  button.setAttribute('type', 'submit');
+  button.setAttribute('class', "btn btn-primary");
+  button.appendChild(document.createTextNode("Add to Order"));
+  button.setAttribute('onclick', "addToOrder()")
 
-itemSection.appendChild(button);
+  itemSection.appendChild(button);
 }
 
 function toppingsSelectionValidator() {
@@ -112,36 +112,45 @@ function getNumberOfToppingsSelected() {
   var count = 0;
   for (var i = 0; i < selections.length; i++) {
     if (selections[i].type === "checkbox" && selections[i].checked === true) {
-        count++;
+      count++;
     }
   }
   return count;
 }
 
-function addToOrder(){
+function addToOrder() {
   var itemProperties = itemData[0].fields;
   var size = getSize();
   var toppings = getToppings();
-  var orderItem = {
-                   'id': guid(),
-                   'menu_id': itemData[0].pk,
-                   'size' : size.name,
-                   'cost': size.cost,
-                   'category': itemProperties.category,
-                   'name': itemProperties.name,
-                   'toppings': toppings
-                  }
-updateShoppingCart(orderItem);
-window.location.href = '/shoppingCart';
+  var orderItem = buildOrderItem(itemData[0].pk, size.name, size.cost, itemProperties.category, itemProperties.name, toppings);
+  updateShoppingCart(orderItem);
+  window.location.href = '/shoppingCart';
 
 }
+
+function buildOrderItem(menu_id, size, cost, category, name, toppings){
+  var orderItem = {
+    'id': guid(),
+    'menu_id': menu_id,
+    'size': size,
+    'cost': cost,
+    'category': category,
+    'name': name,
+    'toppings': toppings
+  }
+  return orderItem;
+
+}
+
+
 function getSize() {
   var size = document.getElementsByClassName('sizeForm');
-  for(i=0; i < size.length; i++) {
-    if(size[i].checked) {
-      var size =  {'cost': size[i].value,
-                     'name': size[i].name
-                   };
+  for (i = 0; i < size.length; i++) {
+    if (size[i].checked) {
+      var size = {
+        'cost': size[i].value,
+        'name': size[i].name
+      };
       return size;
     }
   }
@@ -150,12 +159,12 @@ function getSize() {
 function getToppings() {
   var toppingsList = [];
   var toppingSelection = document.getElementsByClassName('form-check-input');
-  for (i=0; i < toppingSelection.length; i++) {
-    if(toppingSelection[i].checked) {
+  for (i = 0; i < toppingSelection.length; i++) {
+    if (toppingSelection[i].checked) {
       toppingsList.push(toppingSelection[i].name);
     }
   }
-    return toppingsList;
+  return toppingsList;
 }
 
 function updateShoppingCart(orderItem) {
@@ -164,8 +173,43 @@ function updateShoppingCart(orderItem) {
     shoppingCart = [];
   }
   shoppingCart.push(orderItem);
-  localStorage.setItem('shoppingCart',JSON.stringify(shoppingCart))
+  localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart))
 }
+
+function loadOrderForEdit() {
+  var orderForEdit = localShoppingCart.find(obj => {
+    return obj.id == orderId
+  })
+  for (var i = 0; i < orderForEdit.toppings.length; i++) {
+    var checkBox = document.getElementsByName(orderForEdit.toppings[i])
+    checkBox[0].checked = true;
+  }
+  console.log(orderForEdit.size);
+  if (orderForEdit.size.toLowerCase() == 'large') {
+    var sizeSelector = document.getElementsByName('Large')
+    sizeSelector[0].checked = true;
+  } else if (orderForEdit.size.toLowerCase() == 'small') {
+    var sizeSelector = document.getElementsByName('Small');
+    sizeSelector[0].checked = true;
+  }
+
+}
+function removeItemFromOrder() {
+  var updatedLocalShoppingCart = [];
+  updatedLocalShoppingCart = localShoppingCart;
+  updatedLocalShoppingCart = updatedLocalShoppingCart.filter(obj => {
+    if (obj.id !== orderId) {
+      return obj;
+    }
+  })
+  localStorage.setItem('shoppingCart', JSON.stringify(updatedLocalShoppingCart));
+  window.location.href = '/shoppingCart';
+
+}
+function updateOrder(){
+
+}
+
 
 function toCamelCase(str) {
   str = str.split(" ");

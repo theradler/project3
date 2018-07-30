@@ -1,20 +1,34 @@
 {% extends "orders\base.html" %} {% block content %}
+<style>
+    #footer{
+    position:fixed;
+    bottom:0;
+    width:100%;
+}
+</style>
 <script src="/static/js/orderFunctions.js"></script>
 <script type="text/javascript">
   function init() {
-    var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
-    console.log(localShoppingCart);
     var itemData = {{ item }}
     var availableToppings = {{ availableToppings }}
     renderItem(itemData[0].fields);
     renderToppingsForm(availableToppings);
-    addAddToOrderButton();
+    loadOrderForEdit();
   }
   document.addEventListener("DOMContentLoaded", init);
-
-
+  var orderId = "{{ order_id }}";
+  var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
   document.addEventListener("DOMContentLoaded", init);
 </script>
 <div class="container" id="itemContainerSection">
+</div>
+<div class="container" id="editItemSubmit">
+    <div class="row" id="button row">
+        <div class="col">
+        <input type="button" value="Submit Order Update">
+            <input type="button" value="Cancel Order Update" onclick="location.href='/shoppingCart'">
+            <input type="button" value="Remove Item From Order" onclick="removeItemFromOrder()" >
+        </div>
+    </div>
 </div>
 {% endblock %}
