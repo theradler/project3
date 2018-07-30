@@ -2,6 +2,8 @@
 <script src="/static/js/orderFunctions.js"></script>
 <script type="text/javascript">
   function init() {
+    var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
+    console.log(localShoppingCart);
     var itemData = {{ item }}
     var availableToppings = {{ availableToppings }}
     renderItem(itemData[0].fields);
@@ -9,7 +11,9 @@
     addAddToOrderButton();
   }
   document.addEventListener("DOMContentLoaded", init);
-   var itemData = {{ item }}
+
+
+  document.addEventListener("DOMContentLoaded", init);
 </script>
 <div class="container" id="itemContainerSection">
 </div>

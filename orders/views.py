@@ -86,7 +86,6 @@ def customizeOrder(request, item_id):
     item = mark_safe(serializers.serialize("json", models.Menu.objects.filter(pk=item_id)))
     availableToppings = models.Toppings.objects.filter(category=category).filter(item_name=None)
     itemSpecificToppings = models.Toppings.objects.filter(item_name=baseItemDetails.name)
-    print(itemSpecificToppings);
     availableToppings = list(chain(availableToppings,itemSpecificToppings));
     availableToppings = mark_safe(serializers.serialize("json",availableToppings));
     template = loader.get_template('orders/customizeOrder.html')
@@ -101,4 +100,21 @@ def customizeOrder(request, item_id):
 def shoppingCart(request):
     template = loader.get_template('orders/shoppingCart.html');
     context = {}
+    return HttpResponse(template.render(context, request))
+
+@login_required
+def editOrder(request, order_id, item_id):
+    baseItemDetails = models.Menu.objects.get(pk=item_id)
+    category = baseItemDetails.category
+    if ("pizza" in baseItemDetails.category):
+        category = "pizza"
+    item = mark_safe(serializers.serialize("json", models.Menu.objects.filter(pk=item_id)))
+    availableToppings = models.Toppings.objects.filter(category=category).filter(item_name=None)
+    itemSpecificToppings = models.Toppings.objects.filter(item_name=baseItemDetails.name)
+    availableToppings = list(chain(availableToppings, itemSpecificToppings));
+    availableToppings = mark_safe(serializers.serialize("json", availableToppings));
+    template = loader.get_template('orders/editOrder.html')
+    context = {'order_id': order_id,
+               'item': item,
+               'availableToppings': availableToppings}
     return HttpResponse(template.render(context, request))

@@ -124,6 +124,7 @@ function addToOrder(){
   var toppings = getToppings();
   var orderItem = {
                    'id': guid(),
+                   'menu_id': itemData[0].pk,
                    'size' : size.name,
                    'cost': size.cost,
                    'category': itemProperties.category,
@@ -131,7 +132,6 @@ function addToOrder(){
                    'toppings': toppings
                   }
 updateShoppingCart(orderItem);
-console.log(orderItem);
 window.location.href = '/shoppingCart';
 
 }

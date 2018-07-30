@@ -2,11 +2,11 @@ function populateShoppingCart(orders) {
   for (var i = 0; i < orders.length; i++) {
     var localOrder = orders[i]
     var toppings = presentToppings(localOrder.toppings);
-    createOrderTableEntry((localOrder.category + " " + localOrder.name), localOrder.size, localOrder.cost, toppings)
+    createOrderTableEntry((localOrder.category + " " + localOrder.name), localOrder.size, localOrder.cost, toppings, localOrder.id, localOrder.menu_id)
   }
 }
 
-function createOrderTableEntry(item, size, price, toppings) {
+function createOrderTableEntry(item, size, price, toppings, id, menu_id) {
   if (!toppings) {
     toppings = " ";
   }
@@ -16,12 +16,15 @@ function createOrderTableEntry(item, size, price, toppings) {
   var cell2 = row.insertCell(1);
   var cell3 = row.insertCell(2);
   var cell4 = row.insertCell(3);
-
+  var cell5 = row.insertCell(4);
+  var cell6 = row.insertCell(5);
   //set value
   cell1.innerHTML = item;
   cell2.innerHTML = size;
   cell3.innerHTML = toppings;
   cell4.innerHTML = ("$" + price);
+  cell5.innerHTML = '<a href="/editOrder/' + id + "/" + menu_id + '">edit</a>';
+  cell6.innerHTML = '<a href="#">remove</a>';
 
 }
 
@@ -41,7 +44,6 @@ function presentToppings(toppings) {
 function getTotal(orders) {
   var totalCost = 0;
   for (var i = 0; i < orders.length; i++) {
-    console.log(parseInt(orders[i].cost));
     totalCost = parseFloat(totalCost) + parseFloat(orders[i].cost)
   }
    renderTotal(totalCost);
@@ -62,4 +64,8 @@ function toCamelCase(str) {
   }
 
   return str.join(" ");
+}
+
+function LinkFormatter(value, row, index) {
+  return "<a href='"+row.url+"'>"+value+"</a>";
 }
