@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "orders\base.html" %} {% block content %}
+<script src="/static/js/shoppingCartFunctions.js"></script>
+<script type="text/javascript">
+  function init() {
+   var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'))
+   console.log(localShoppingCart);
+   populateShoppingCart(localShoppingCart);
+
+  }
+  document.addEventListener("DOMContentLoaded", init);
+</script>
+<div class="container" id="itemContainerSection">
+    <h1>Your Order</h1>
+    <hr>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Size</th>
+            <th scope="cold">Price</th>
+        </tr>
+        </thead>
+        <tbody id="orderBody"></tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from itertools import  chain
 from django.shortcuts import render, redirect, render_to_response
 from django.template import loader
 from django.utils.safestring import mark_safe
@@ -76,7 +77,11 @@ def customizeOrder(request, item_id):
     if("pizza" in baseItemDetails.category):
         category = "pizza"
     item = mark_safe(serializers.serialize("json", models.Menu.objects.filter(pk=item_id)))
-    availableToppings = mark_safe(serializers.serialize("json", models.Toppings.objects.filter(category=category)))
+    availableToppings = models.Toppings.objects.filter(category=category).filter(item_name=None)
+    itemSpecificToppings = models.Toppings.objects.filter(item_name=baseItemDetails.name)
+    print(itemSpecificToppings);
+    availableToppings = list(chain(availableToppings,itemSpecificToppings));
+    availableToppings = mark_safe(serializers.serialize("json",availableToppings));
     template = loader.get_template('orders/customizeOrder.html')
     context = {
         'item': item,
