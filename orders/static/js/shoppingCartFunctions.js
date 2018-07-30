@@ -1,8 +1,8 @@
 function populateShoppingCart(orders) {
-  for (i = 0; i < orders.length; i++) {
+  for (var i = 0; i < orders.length; i++) {
     var localOrder = orders[i]
     var toppings = presentToppings(localOrder.toppings);
-    var order = createOrderTableEntry((localOrder.category + " " + localOrder.name), localOrder.size, localOrder.cost,toppings)
+    createOrderTableEntry((localOrder.category + " " + localOrder.name), localOrder.size, localOrder.cost, toppings)
   }
 }
 
@@ -30,19 +30,19 @@ function presentToppings(toppings) {
  if (toppings.length == 0) {
    return null;
  }
- console.log(toppings);
- for (i=0; i < toppings.length; i++) {
+ for (var i=0; i < toppings.length; i++) {
    toppingString  = toppingString + toCamelCase(toppings[i]) + ", ";
  }
  toppingString = toppingString.substring(0, toppingString.length -2);
- return toppingString
+ return toppingString;
 }
 
 
 function getTotal(orders) {
   var totalCost = 0;
-  for (i = 0; i < orders.length; i++) {
-    totalCost = totalCost + parseInt(orders[i].cost)
+  for (var i = 0; i < orders.length; i++) {
+    console.log(parseInt(orders[i].cost));
+    totalCost = parseFloat(totalCost) + parseFloat(orders[i].cost)
   }
    renderTotal(totalCost);
 }

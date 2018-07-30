@@ -1,0 +1,16 @@
+{% extends "orders\base.html" %} {% block content %}
+<script src="/static/js/orderFunctions.js"></script>
+<script type="text/javascript">
+  function init() {
+    var itemData = {{ item }}
+    var availableToppings = {{ availableToppings }}
+    renderItem(itemData[0].fields);
+    renderToppingsForm(availableToppings);
+    addAddToOrderButton();
+  }
+  document.addEventListener("DOMContentLoaded", init);
+   var itemData = {{ item }}
+</script>
+<div class="container" id="itemContainerSection">
+</div>
+{% endblock %}

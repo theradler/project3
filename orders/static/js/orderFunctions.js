@@ -122,13 +122,16 @@ function addToOrder(){
   var itemProperties = itemData[0].fields;
   var size = getSize();
   var toppings = getToppings();
-  var orderItem = {'size' : size.name,
+  var orderItem = {
+                   'id': guid(),
+                   'size' : size.name,
                    'cost': size.cost,
                    'category': itemProperties.category,
                    'name': itemProperties.name,
                    'toppings': toppings
                   }
 updateShoppingCart(orderItem);
+console.log(orderItem);
 window.location.href = '/shoppingCart';
 
 }
@@ -172,4 +175,13 @@ function toCamelCase(str) {
   }
 
   return str.join(" ");
+}
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }

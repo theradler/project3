@@ -44,7 +44,6 @@ function loadMenuItems(menuData) {
     //get correct meny div
     var menuDiv = document.getElementById((tempItem.category.replace(/ /g, '') + "ItemSection"));
 
-    console.log(tempItem.defaultPrice);
     //create col body menu item
     cardBody = document.createElement('div');
     cardBody.setAttribute('class', 'card card-body')
@@ -88,6 +87,7 @@ function loadMenuItems(menuData) {
 
       //create button and add it form
       addToOrderButton.setAttribute('type', 'submit');
+      addToOrderButton.setAttribute('class','btn btn-danger');
       addToOrderButton.appendChild(document.createTextNode('Add to Order'))
       addToOrderForm.appendChild(addToOrderButton);
 

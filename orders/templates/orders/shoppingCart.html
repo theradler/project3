@@ -3,7 +3,6 @@
 <script type="text/javascript">
   function init() {
    var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'))
-   console.log(localShoppingCart);
    populateShoppingCart(localShoppingCart);
    getTotal(localShoppingCart);
 
@@ -29,6 +28,13 @@
         <div class="col" id="totalField">
         </div>
     </div>
+        <div class="row">
+            <div class="col" id="checkoutButtonField">
+                <input type="button" class="btn" value="Checkout" style="width:200px;float:right;" >
+                <input type="button" class="btn" value="Continue Shopping" style="width:200px;float:right;margin-right:20px;" onclick="location.href='/menu'">
+            </div>
+        </div>
+
 
 </div>
 {% endblock %}

@@ -549,3 +549,6 @@ text-align: right;
 #accessTitle {
 text-align: center;
 }
+#checkoutButtonField {
+float: right;
+}
