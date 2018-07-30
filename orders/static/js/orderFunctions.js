@@ -195,6 +195,10 @@ function loadOrderForEdit() {
 
 }
 function removeItemFromOrder() {
+  removeItem();
+  window.location.href = '/shoppingCart';
+}
+function removeItem() {
   var updatedLocalShoppingCart = [];
   updatedLocalShoppingCart = localShoppingCart;
   updatedLocalShoppingCart = updatedLocalShoppingCart.filter(obj => {
@@ -203,11 +207,15 @@ function removeItemFromOrder() {
     }
   })
   localStorage.setItem('shoppingCart', JSON.stringify(updatedLocalShoppingCart));
-  window.location.href = '/shoppingCart';
-
 }
 function updateOrder(){
-
+  removeItem();
+  var itemProperties = itemData[0].fields;
+  var size = getSize();
+  var toppings = getToppings();
+  var orderItem = buildOrderItem(itemData[0].pk, size.name, size.cost, itemProperties.category, itemProperties.name, toppings);
+  updateShoppingCart(orderItem);
+  window.location.href = '/shoppingCart';
 }
 
 

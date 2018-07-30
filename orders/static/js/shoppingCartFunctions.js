@@ -24,7 +24,6 @@ function createOrderTableEntry(item, size, price, toppings, id, menu_id) {
   cell3.innerHTML = toppings;
   cell4.innerHTML = ("$" + price);
   cell5.innerHTML = '<a href="/editOrder/' + id + "/" + menu_id + '">edit</a>';
-  cell6.innerHTML = '<a href="#">remove</a>';
 
 }
 
