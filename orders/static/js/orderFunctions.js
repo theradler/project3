@@ -128,9 +128,8 @@ function addToOrder(){
                    'name': itemProperties.name,
                    'toppings': toppings
                   }
-console.log(orderItem);
 updateShoppingCart(orderItem);
-
+window.location.href = '/shoppingCart';
 
 }
 function getSize() {

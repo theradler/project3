@@ -84,3 +84,8 @@ def customizeOrder(request, item_id):
     }
 
     return HttpResponse(template.render(context, request))
+
+def shoppingCart(request):
+    template = loader.get_template('orders/shoppingCart.html');
+    context = {}
+    return HttpResponse(template.render(context, request))
