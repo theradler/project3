@@ -13,6 +13,9 @@ function renderPizzaItemTitle(item, itemToAppend) {
 
 function renderSizeForm(item, itemToAppend) {
 
+  if (item.largePrice == null) {
+    return
+  };
   console.log("render size form")
   var formDiv = document.createElement('form');
   formDiv.id = 'orderForm'
@@ -32,6 +35,9 @@ function renderSizeForm(item, itemToAppend) {
 }
 
 function renderToppingsForm(item) {
+  if (item.length == 0) {
+    return
+  }
   var itemSection = document.getElementById('itemContainerSection');
   var subTitle = document.createElement('h4');
   var hr = document.createElement('hr');
@@ -119,10 +125,20 @@ function getNumberOfToppingsSelected() {
 }
 
 function addToOrder() {
+  var cost;
+  var size;
   var itemProperties = itemData[0].fields;
+  if (itemData[0].fields.defaultPrice) {
+    cost = itemData[0].fields.defaultPrice;
+  }
+  else {
+    cost = size.cost;
+    size = size.name;
+
+  }
   var size = getSize();
   var toppings = getToppings();
-  var orderItem = buildOrderItem(itemData[0].pk, size.name, size.cost, itemProperties.category, itemProperties.name, toppings);
+  var orderItem = buildOrderItem(itemData[0].pk, size, cost, itemProperties.category, itemProperties.name, toppings);
   updateShoppingCart(orderItem);
   window.location.href = '/shoppingCart';
 

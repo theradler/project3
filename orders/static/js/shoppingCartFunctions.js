@@ -10,6 +10,9 @@ function createOrderTableEntry(item, size, price, toppings, id, menu_id) {
   if (!toppings) {
     toppings = " ";
   }
+  if (!size) {
+    size = " ";
+  }
   var table = document.getElementById('orderTable')
   var row = table.insertRow(-1);
   var cell1 = row.insertCell(0);
