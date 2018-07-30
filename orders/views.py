@@ -4,6 +4,7 @@ from django.template import loader
 from django.utils.safestring import mark_safe
 from django.contrib.auth import login as auth_login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from orders import models
 
@@ -76,7 +77,7 @@ def signout(request):
 
 
 
-
+@login_required
 def customizeOrder(request, item_id):
     baseItemDetails = models.Menu.objects.get(pk=item_id)
     category = baseItemDetails.category
@@ -96,6 +97,7 @@ def customizeOrder(request, item_id):
 
     return HttpResponse(template.render(context, request))
 
+@login_required
 def shoppingCart(request):
     template = loader.get_template('orders/shoppingCart.html');
     context = {}
