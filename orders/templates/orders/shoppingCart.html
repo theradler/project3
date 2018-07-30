@@ -5,6 +5,7 @@
    var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'))
    console.log(localShoppingCart);
    populateShoppingCart(localShoppingCart);
+   getTotal(localShoppingCart);
 
   }
   document.addEventListener("DOMContentLoaded", init);
@@ -12,15 +13,22 @@
 <div class="container" id="itemContainerSection">
     <h1>Your Order</h1>
     <hr>
-    <table class="table">
+    <table class="table" id="orderTable">
         <thead>
         <tr>
             <th scope="col">Item</th>
             <th scope="col">Size</th>
+            <th scope="col">Toppings</th>
             <th scope="cold">Price</th>
         </tr>
         </thead>
         <tbody id="orderBody"></tbody>
     </table>
+    <hr>
+    <div class="row">
+        <div class="col" id="totalField">
+        </div>
+    </div>
+
 </div>
 {% endblock %}

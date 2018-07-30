@@ -543,3 +543,6 @@ padding-left: 15px;
 .form-horizontal .checkbox {
     margin-bottom: 0;
 }
+#totalField{
+text-align: right;
+}

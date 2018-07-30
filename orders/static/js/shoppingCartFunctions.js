@@ -1,28 +1,65 @@
 function populateShoppingCart(orders) {
-
-var order = createOrderEntry('pizza', 'large','12.50')
-var orderTable = document.getElementById('orderBody');
-orderTable.appendChild(order);
+  for (i = 0; i < orders.length; i++) {
+    var localOrder = orders[i]
+    var toppings = presentToppings(localOrder.toppings);
+    var order = createOrderTableEntry((localOrder.category + " " + localOrder.name), localOrder.size, localOrder.cost,toppings)
+  }
 }
 
-function createOrderEntry(item, size, price) {
-  console.log(item)
-  var tr = document.createElement('tr');
+function createOrderTableEntry(item, size, price, toppings) {
+  if (!toppings) {
+    toppings = " ";
+  }
+  var table = document.getElementById('orderTable')
+  var row = table.insertRow(-1);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  var cell4 = row.insertCell(3);
 
-  var item = document.createElement('td')
-  console.log(tr);
-  item.innerHTML = item.toString();
-  console.log(item);
-  tr.appendChild(item);
+  //set value
+  cell1.innerHTML = item;
+  cell2.innerHTML = size;
+  cell3.innerHTML = toppings;
+  cell4.innerHTML = ("$" + price);
 
-  var size = document.createElement('td');
-  size.appendChild(document.createTextNode(size));
-  tr.appendChild(size);
+}
 
-  var price = document.createElement('td');
-  price.appendChild(document.createTextNode(price));
-  tr.appendChild(price);
+function presentToppings(toppings) {
+ var toppingString ="";
+ if (toppings.length == 0) {
+   return null;
+ }
+ console.log(toppings);
+ for (i=0; i < toppings.length; i++) {
+   toppingString  = toppingString + toCamelCase(toppings[i]) + ", ";
+ }
+ toppingString = toppingString.substring(0, toppingString.length -2);
+ return toppingString
+}
 
-  console.log(tr);
-  return tr;
+
+function getTotal(orders) {
+  var totalCost = 0;
+  for (i = 0; i < orders.length; i++) {
+    totalCost = totalCost + parseInt(orders[i].cost)
+  }
+   renderTotal(totalCost);
+}
+
+function renderTotal(totalCost) {
+  var totalField = document.getElementById('totalField')
+  var total = document.createElement('h3');
+  total.innerHTML = ("Total: $" + totalCost.toFixed(2));
+  totalField.appendChild(total);
+}
+
+function toCamelCase(str) {
+  str = str.split(" ");
+
+  for (var i = 0, x = str.length; i < x; i++) {
+    str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+  }
+
+  return str.join(" ");
 }
