@@ -1,9 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from itertools import  chain
-from django.shortcuts import render, redirect, render_to_response
 from django.template import loader
 from django.utils.safestring import mark_safe
-from django.contrib.auth import login as auth_login, authenticate
+from django.contrib.auth import login as auth_login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core import serializers
 from orders import models
@@ -70,6 +69,13 @@ def login(request):
 
                        }
             return HttpResponse(template.render(context, request))
+
+def signout(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+
+
 
 def customizeOrder(request, item_id):
     baseItemDetails = models.Menu.objects.get(pk=item_id)
