@@ -11,8 +11,8 @@
     <h1 id="accessTitle">Please Login or Register to Start Your Order</h1>
     <hr>
 <div class="row">
-    <div class="col" id="registerSection">
-        Register
+    <div class="col accessSection" id="registerSection">
+        <h3>Register</h3>
         {% if userCreationForm.errors %}
         {% for error, field in userCreationForm.errors.items %}
             <div class="alert alert-danger" id="accessErrors">
@@ -23,20 +23,19 @@
 
     <form method="post" action="/register/" class="form-group">
           {% csrf_token %}
-           {{ userCreationForm.username.label }}
+           {{ userCreationForm.username.label }}:<br>
            {{ userCreationForm.username  }}
         <br>
-           {{ userCreationForm.password1.label }}
+           {{ userCreationForm.password1.label }}:<br>
            {{ userCreationForm.password1 }}
         <br>
-           {{ userCreationForm.password2.label }}
-           {{ userCreationForm.password2 }}
-        <br>
-        <button type="submit" >Register</button>
+           {{ userCreationForm.password2.label }}<br>
+           {{ userCreationForm.password2 }}<br>
+        <button type="submit" style="margin-top:10px;">Register</button>
     </form>
     </div>
-    <div class="col" style="background:green" id="loginSection">
-        Log In
+    <div class="col accessSection" id="loginSection">
+        <h3>Log In</h3>
          {% if loginForm.errors %}
          {% for error, field in loginForm.errors.items %}
             <div class="alert alert-danger" id="accessErrors">
@@ -46,8 +45,12 @@
 {% endif %}
             <form method="post" action="/login/">
             {% csrf_token %}
-            {{ loginForm.as_p }}
-            <button type="submit">Login</button>
+                {{ loginForm.username.label }}:<br>
+                {{ loginForm.username}}
+                <br>
+                {{ loginForm.password.label }}:<br>
+                {{ loginForm.password }}<br>
+            <button type="submit" style="margin-top:10px">Login</button>
         </form>
     </div>
 </div>

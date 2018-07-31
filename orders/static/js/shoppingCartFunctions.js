@@ -60,15 +60,16 @@ function renderTotal(totalCost) {
 function submitOrder() {
   var url ='/getItemInfo/'
   var xHttp = new XMLHttpRequest();
+  xHttp.onreadystatechange = function() {
+    if(xHttp.readyState == xHttp.DONE && xHttp.status == 200 ) {
+      console.log(xHttp.responseText);
+    }
+  };
   xHttp.open("GET", url, true);
   xHttp.setRequestHeader("Content-Type","application/json");
   xHttp.setRequestHeader("X-CSRFToken", csrfToken);
-  xHttp.send()
-  xHttp.onreadystatechange = () => {
-    if(this.readyState === xHttp.DONE && this.status === 200 ) {
-      console.log(this.responseText);
-    }
-  };
+  xHttp.send('1')
+
   // console.log(csrfToken);
   // var xHttp = new XMLHttpRequest();
   // var url = '/submitOrder/';
