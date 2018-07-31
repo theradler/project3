@@ -23,6 +23,8 @@ class Toppings(models.Model):
         verbose_name_plural = _("Toppings")
 
 
-class Order(models.Model):
-    order = models.CharField(max_length=100, null=True, blank=True)
+class submitedOrder(models.Model):
+    orderItems = models.CharField(max_length=1000, null=True, blank=True)
+    totalPrice = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
     orderedBy = models.CharField(max_length=100, null=True, blank=True)
+    orderTime = models.DateTimeField(auto_now_add=True)

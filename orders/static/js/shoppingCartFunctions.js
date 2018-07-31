@@ -31,15 +31,15 @@ function createOrderTableEntry(item, size, price, toppings, id, menu_id) {
 }
 
 function presentToppings(toppings) {
- var toppingString ="";
- if (toppings.length == 0) {
-   return null;
- }
- for (var i=0; i < toppings.length; i++) {
-   toppingString  = toppingString + toCamelCase(toppings[i]) + ", ";
- }
- toppingString = toppingString.substring(0, toppingString.length -2);
- return toppingString;
+  var toppingString = "";
+  if (toppings.length == 0) {
+    return null;
+  }
+  for (var i = 0; i < toppings.length; i++) {
+    toppingString = toppingString + toCamelCase(toppings[i]) + ", ";
+  }
+  toppingString = toppingString.substring(0, toppingString.length - 2);
+  return toppingString;
 }
 
 
@@ -48,7 +48,7 @@ function getTotal(orders) {
   for (var i = 0; i < orders.length; i++) {
     totalCost = parseFloat(totalCost) + parseFloat(orders[i].cost)
   }
-   renderTotal(totalCost);
+  renderTotal(totalCost);
 }
 
 function renderTotal(totalCost) {
@@ -57,26 +57,70 @@ function renderTotal(totalCost) {
   total.innerHTML = ("Total: $" + totalCost.toFixed(2));
   totalField.appendChild(total);
 }
+
 function submitOrder() {
-  var url ='/getItemInfo/'
+  var errorElement = document.getElementById('shoppingCartErrors');
+  errorElement.innerHTML = '';
+  errorElement.style.diplay= 'none';
+  var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
+  for (var i = 0; i < localShoppingCart.length; i++) {
+    validateAndPlaceOrder(localShoppingCart[i]);
+  }
+  if(orderValid) {
+    console.log('order is valid');
+    console.log(finalOrder);
+  }
+  else {
+    console.log('order is not valid');
+    finalOrder =[];
+  }
+}
+
+function validateAndPlaceOrder(orderItem) {
+  var url = '/getItemInfo/'
   var xHttp = new XMLHttpRequest();
   xHttp.onreadystatechange = function() {
-    if(xHttp.readyState == xHttp.DONE && xHttp.status == 200 ) {
-      console.log(xHttp.responseText);
+    if (xHttp.readyState == xHttp.DONE && xHttp.status == 200) {
+      var baseItem = JSON.parse(xHttp.responseText)[0].fields;
+      if(orderValidator(orderItem, baseItem)) {
+        finalOrder.push(orderItem);
+      } else {
+        orderValid = false;
+      }
     }
   };
-  xHttp.open("GET", url, true);
-  xHttp.setRequestHeader("Content-Type","application/json");
+  xHttp.open("POST", url, false);
+  xHttp.setRequestHeader("Content-Type", "application/json");
   xHttp.setRequestHeader("X-CSRFToken", csrfToken);
-  xHttp.send('1')
+  xHttp.send(orderItem.menu_id);
+}
 
-  // console.log(csrfToken);
-  // var xHttp = new XMLHttpRequest();
-  // var url = '/submitOrder/';
-  // xHttp.open("POST", url, true);
-  // xHttp.setRequestHeader("Content-Type","application/json");
-  // xHttp.setRequestHeader("X-CSRFToken", csrfToken);
-  // console.log(JSON.parse(localStorage.getItem('shoppingCart')));
+function orderValidator(orderItem, baseItem) {
+  var OrderIsValid = true
+  if (!numberOfToppings(orderItem.toppings.length, baseItem.numberOfToppings)) {
+     var errorMessage = "Your " + orderItem.category + " " + orderItem.name + " has too many toppings, please remove them to continue"
+     shoppingCartError(errorMessage);
+      OrderIsValid = false;
+  }
+  return OrderIsValid;
+}
+function shoppingCartError(errorMessage){
+  var error = document.createElement('strong');
+  var errorElement = document.getElementById('shoppingCartErrors')
+  error.appendChild(document.createTextNode(errorMessage))
+  errorElement.appendChild(error);
+  errorElement.style.display = 'block';
+}
+
+function numberOfToppings(allowedToppings, toppingsOnOrder) {
+  if (allowedToppings <= toppingsOnOrder) {
+    console.log("Number of Toppingss is Ok")
+    return true;
+  }
+  else {
+    console.log("Too many toppings")
+    return false;
+  }
 }
 
 
@@ -91,5 +135,5 @@ function toCamelCase(str) {
 }
 
 function LinkFormatter(value, row, index) {
-  return "<a href='"+row.url+"'>"+value+"</a>";
+  return "<a href='" + row.url + "'>" + value + "</a>";
 }

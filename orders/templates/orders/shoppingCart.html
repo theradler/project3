@@ -12,14 +12,15 @@
    var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'))
    populateShoppingCart(localShoppingCart);
    getTotal(localShoppingCart);
-
   }
   document.addEventListener("DOMContentLoaded", init);
   var csrfToken = "{{ csrf_token }}";
+  var finalOrder=[];
+  var orderValid = true;
   </script>
 <div class="container" id="itemContainerSection">
     {% csrf_token %}
-
+    <div class="alert alert-danger" role="alert" id="shoppingCartErrors" style="display:none;"></div>
     <h1>Your Order</h1>
     <hr>
     <table class="table" id="orderTable">

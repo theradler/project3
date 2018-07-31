@@ -145,6 +145,7 @@ def orderComplete(request):
     return HttpResponse(template.render(context, request))
 
 def getItemInfo(request):
-    print('itemRequestRecieved')
-    data = {}
-    return HttpResponse("Request Recieved")
+    requestValue = request.body.decode('utf-8')
+    item = models.Menu.objects.filter(pk=requestValue)
+    item = mark_safe(serializers.serialize("json", item))
+    return HttpResponse(item)
