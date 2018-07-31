@@ -15,8 +15,11 @@
 
   }
   document.addEventListener("DOMContentLoaded", init);
-</script>
+  var csrfToken = "{{ csrf_token }}";
+  </script>
 <div class="container" id="itemContainerSection">
+    {% csrf_token %}
+
     <h1>Your Order</h1>
     <hr>
     <table class="table" id="orderTable">
@@ -38,7 +41,7 @@
     </div>
         <div class="row">
             <div class="col" id="checkoutButtonField">
-                <input type="button" class="btn" value="Checkout" style="width:200px;float:right;" >
+                <input type="button" class="btn" value="Checkout" style="width:200px;float:right;" onclick="submitOrder()" >
                 <input type="button" class="btn" value="Continue Shopping" style="width:200px;float:right;margin-right:20px;" onclick="location.href='/menu'">
             </div>
         </div>

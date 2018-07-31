@@ -21,3 +21,8 @@ class Toppings(models.Model):
     class Meta:
         verbose_name = _("Toppings")
         verbose_name_plural = _("Toppings")
+
+
+class Order(models.Model):
+    order = models.CharField(max_length=100, null=True, blank=True)
+    orderedBy = models.CharField(max_length=100, null=True, blank=True)

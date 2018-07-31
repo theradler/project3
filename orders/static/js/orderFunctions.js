@@ -126,20 +126,21 @@ function getNumberOfToppingsSelected() {
 
 function addToOrder() {
   var cost;
-  var size;
   var itemProperties = itemData[0].fields;
   if (itemData[0].fields.defaultPrice) {
     cost = itemData[0].fields.defaultPrice;
+    var size=" ";
   }
   else {
+    var size = getSize();
     cost = size.cost;
     size = size.name;
-
   }
-  var size = getSize();
+
   var toppings = getToppings();
   var orderItem = buildOrderItem(itemData[0].pk, size, cost, itemProperties.category, itemProperties.name, toppings);
   updateShoppingCart(orderItem);
+  console.log(orderItem);
   window.location.href = '/shoppingCart';
 
 }
@@ -167,6 +168,7 @@ function getSize() {
         'cost': size[i].value,
         'name': size[i].name
       };
+      console.log(size);
       return size;
     }
   }
@@ -227,9 +229,17 @@ function removeItem() {
 function updateOrder(){
   removeItem();
   var itemProperties = itemData[0].fields;
-  var size = getSize();
+  if (itemData[0].fields.defaultPrice) {
+    cost = itemData[0].fields.defaultPrice;
+    var size = " ";
+  }
+  else {
+    var size = getSize();
+    cost = size.cost;
+    size = size.name;
+  }
   var toppings = getToppings();
-  var orderItem = buildOrderItem(itemData[0].pk, size.name, size.cost, itemProperties.category, itemProperties.name, toppings);
+  var orderItem = buildOrderItem(itemData[0].pk, size, cost, itemProperties.category, itemProperties.name, toppings);
   updateShoppingCart(orderItem);
   window.location.href = '/shoppingCart';
 }

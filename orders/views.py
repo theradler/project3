@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from itertools import  chain
+from itertools import chain
+import json
 from django.template import loader
 from django.utils.safestring import mark_safe
 from django.contrib.auth import login as auth_login, authenticate, logout
@@ -118,3 +119,32 @@ def editOrder(request, order_id, item_id):
                'item': item,
                'availableToppings': availableToppings}
     return HttpResponse(template.render(context, request))
+
+def submitOrder(request):
+    body_unicode = request.body.decode('utf-8')
+    body_data = json.loads(body_unicode)
+    body_data = json.loads(body_data)
+    for key in body_data:
+        orderValues = list(key.values())
+        itemId = orderValues[1]
+        itemSize = orderValues[2]
+        itemCost = orderValues[3]
+        itemCategory = orderValues[4]
+        itemName = orderValues[5]
+        print(orderValues[6])
+        print(itemId)
+        print(itemSize)
+        print(itemCost)
+        print(itemCategory)
+        # orderObject = json.loads(key, object_hook=lambda d: namedtuple('X',d.keys())(*d.values()))
+    return HttpResponse("Order Recieved")
+
+def orderComplete(request):
+    template = loader.get_template('orders/orderComplete.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def getItemInfo(request):
+    print('itemRequestRecieved')
+    data = {}
+    return HttpResponse("Request Recieved")

@@ -57,6 +57,27 @@ function renderTotal(totalCost) {
   total.innerHTML = ("Total: $" + totalCost.toFixed(2));
   totalField.appendChild(total);
 }
+function submitOrder() {
+  var url ='/getItemInfo/'
+  var xHttp = new XMLHttpRequest();
+  xHttp.open("GET", url, true);
+  xHttp.setRequestHeader("Content-Type","application/json");
+  xHttp.setRequestHeader("X-CSRFToken", csrfToken);
+  xHttp.send()
+  xHttp.onreadystatechange = () => {
+    if(this.readyState === xHttp.DONE && this.status === 200 ) {
+      console.log(this.responseText);
+    }
+  };
+  // console.log(csrfToken);
+  // var xHttp = new XMLHttpRequest();
+  // var url = '/submitOrder/';
+  // xHttp.open("POST", url, true);
+  // xHttp.setRequestHeader("Content-Type","application/json");
+  // xHttp.setRequestHeader("X-CSRFToken", csrfToken);
+  // console.log(JSON.parse(localStorage.getItem('shoppingCart')));
+}
+
 
 function toCamelCase(str) {
   str = str.split(" ");
