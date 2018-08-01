@@ -19,9 +19,10 @@
   document.addEventListener("DOMContentLoaded", init);
 </script>
 
-<div clas="container">
+<div clas="container" style="width:50%;" id="orderStatus">
     <h1>Your Order Status</h1>
-</div>
+    <hr>
+
 <table class="table" id="orderStatusTable">
     <thead>
     <tr>
@@ -32,4 +33,6 @@
     </tr>
     </thead>
 </table>
+    <button onclick="window.location.reload()" style="margin-top:10px;" class="btn">Refresh</button>
+</div>
 {% endblock %}
