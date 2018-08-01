@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth import login as auth_login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core import serializers
 from orders import models
 
@@ -148,7 +149,7 @@ def getItemInfo(request):
     item = serializers.serialize("json", item)
     return HttpResponse(item)
 
-@login_required
+@staff_member_required
 def orderManagement(request):
     orders = mark_safe(serializers.serialize('json', models.submitedOrder.objects.all()))
     template = loader.get_template('orders/orderManagement.html')
