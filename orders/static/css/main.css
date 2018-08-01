@@ -519,12 +519,10 @@ margin-top: 100px;
 margin-bottom: 100px;
 }
 
-#registerSection {
-outline-style: outset;
-border:2px solid black;
-margin:5px;
+.form-group{
 text-align: left;
-vertical-
+width: 50%;
+margin: 0 auto;
 }
 #accessErrors {
 width:50%;
