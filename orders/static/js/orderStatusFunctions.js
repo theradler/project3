@@ -24,11 +24,17 @@ function createOrderTableEntry(order, total, submitTime, status) {
   cell1.innerHTML = buildOrderString(order)
   cell2.innerHTML = "$" + total;
   cell3.innerHTML = submitTime;
-  cell4.innerHTML = status;
+  cell4.innerHTML = returnStatusMessage(status);
 
 
 }
-
+function returnStatusMessage(status){
+  if(status) {
+    return "Order Complete"
+  } else {
+    return "Order Pending"
+  }
+}
 
 function buildOrderString(orders) {
   var jsonOrders = JSON.parse(orders);

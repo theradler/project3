@@ -150,12 +150,18 @@ def getItemInfo(request):
 
 @login_required
 def orderManagement(request):
-    orders = mark_safe(serializers.serialize('json', models.submitedOrder.objects.all()));
+    orders = mark_safe(serializers.serialize('json', models.submitedOrder.objects.all()))
     template = loader.get_template('orders/orderManagement.html')
     context = {
         'orders': orders
     }
     return HttpResponse(template.render(context, request))
+
+@login_required
+def markOrderAsComplete(request, order_id):
+    models.submitedOrder.objects.filter(pk=order_id).update(orderComplete=True)
+    orders = mark_safe(serializers.serialize('json', models.submitedOrder.objects.all()))
+    return HttpResponse(orders)
 
 def unauthorized(request):
     return HttpResponse('Unauthorized', status=401)

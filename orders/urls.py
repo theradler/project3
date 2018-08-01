@@ -20,5 +20,6 @@ urlpatterns = [
     path('submitOrder/', views.submitOrder, name="submitOrder"),
     path('unauthorized/', views.unauthorized, name="unauthorized"),
     path('orderManagement/', views.orderManagement, name="orderManagement"),
+    path('markOrderAsComplete/<int:order_id>/', views.markOrderAsComplete, name="markOrderAsComplete"),
 
 ]
