@@ -15,8 +15,9 @@ urlpatterns = [
     path('shoppingCart/', views.shoppingCart, name="shopping cart"),
     path('logout/', views.signout, name="logout"),
     path('editOrder/<str:order_id>/<int:item_id>', views.editOrder, name="editOrder"),
-    path('submitOrder/', views.submitOrder, name="submitOrder"),
-    path('orderComplete/', views.orderComplete,name="orderComplete"),
+    path('orderStatus/<str:user>', views.orderStatus,name="orderStatus"),
     path('getItemInfo/', views.getItemInfo, name="getItemInfo"),
+    path('submitOrder/', views.submitOrder, name="submitOrder"),
+    path('unauthorized/', views.unauthorized, name="unauthorized"),
 
 ]

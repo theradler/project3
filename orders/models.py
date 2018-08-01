@@ -28,3 +28,4 @@ class submitedOrder(models.Model):
     totalPrice = models.DecimalField(max_digits=12, decimal_places=2, null=False, blank=False)
     orderedBy = models.CharField(max_length=100, null=True, blank=True)
     orderTime = models.DateTimeField(auto_now_add=True)
+    orderComplete = models.NullBooleanField(default=False);

@@ -58,23 +58,59 @@ function renderTotal(totalCost) {
   totalField.appendChild(total);
 }
 
+
 function submitOrder() {
   var errorElement = document.getElementById('shoppingCartErrors');
   errorElement.innerHTML = '';
-  errorElement.style.diplay= 'none';
+  errorElement.style.diplay = 'none';
   var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
   for (var i = 0; i < localShoppingCart.length; i++) {
     validateAndPlaceOrder(localShoppingCart[i]);
   }
-  if(orderValid) {
-    console.log('order is valid');
-    console.log(finalOrder);
-  }
-  else {
-    console.log('order is not valid');
-    finalOrder =[];
+  if (orderValid) {
+    submitOrderToServer();
+  } else {
+    finalOrder = [];
   }
 }
+
+function returnTotalCostAtCheckout(){
+  var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'))
+  var totalCost = 0;
+  for (var i = 0; i < localShoppingCart.length; i++) {
+    totalCost = parseFloat(totalCost) + parseFloat(localShoppingCart[i].cost)
+  }
+  return totalCost
+}
+
+
+function submitOrderToServer() {
+  var totalCost = returnTotalCostAtCheckout();
+  var submitOrderBody = {
+    'user': user,
+    'total': totalCost,
+    'order': finalOrder
+  }
+  var url = '/submitOrder/'
+  var xHttp = new XMLHttpRequest();
+  xHttp.onreadystatechange = function() {
+    if (xHttp.readyState == xHttp.DONE && xHttp.status == 200) {
+      //confirm order and navigate to ordersStatusPage
+      if (xHttp.responseText == 1) {
+        localStorage.setItem('shoppingCart', null)
+        console.log('Order Success, Proceed to Next Page')
+        window.location.href=('/orderStatus/' + user )
+      } else {
+        shoppingCartError("There was an issue with your request, please try again")
+      }
+    }
+  };
+  xHttp.open("POST", url, true);
+  xHttp.setRequestHeader("Content-Type", "application/json");
+  xHttp.setRequestHeader("X-CSRFToken", csrfToken);
+  xHttp.send(JSON.stringify(submitOrderBody));
+}
+
 
 function validateAndPlaceOrder(orderItem) {
   var url = '/getItemInfo/'
@@ -82,7 +118,7 @@ function validateAndPlaceOrder(orderItem) {
   xHttp.onreadystatechange = function() {
     if (xHttp.readyState == xHttp.DONE && xHttp.status == 200) {
       var baseItem = JSON.parse(xHttp.responseText)[0].fields;
-      if(orderValidator(orderItem, baseItem)) {
+      if (orderValidator(orderItem, baseItem)) {
         finalOrder.push(orderItem);
       } else {
         orderValid = false;
@@ -98,13 +134,14 @@ function validateAndPlaceOrder(orderItem) {
 function orderValidator(orderItem, baseItem) {
   var OrderIsValid = true
   if (!numberOfToppings(orderItem.toppings.length, baseItem.numberOfToppings)) {
-     var errorMessage = "Your " + orderItem.category + " " + orderItem.name + " has too many toppings, please remove them to continue"
-     shoppingCartError(errorMessage);
-      OrderIsValid = false;
+    var errorMessage = "Your " + orderItem.category + " " + orderItem.name + " has too many toppings, please remove them to continue"
+    shoppingCartError(errorMessage);
+    OrderIsValid = false;
   }
   return OrderIsValid;
 }
-function shoppingCartError(errorMessage){
+
+function shoppingCartError(errorMessage) {
   var error = document.createElement('strong');
   var errorElement = document.getElementById('shoppingCartErrors')
   error.appendChild(document.createTextNode(errorMessage))
@@ -113,12 +150,10 @@ function shoppingCartError(errorMessage){
 }
 
 function numberOfToppings(allowedToppings, toppingsOnOrder) {
-  if (allowedToppings <= toppingsOnOrder) {
-    console.log("Number of Toppingss is Ok")
+  if (allowedToppings <=
+    toppingsOnOrder) {
     return true;
-  }
-  else {
-    console.log("Too many toppings")
+  } else {
     return false;
   }
 }

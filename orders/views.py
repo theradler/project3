@@ -120,32 +120,33 @@ def editOrder(request, order_id, item_id):
                'availableToppings': availableToppings}
     return HttpResponse(template.render(context, request))
 
+@login_required
 def submitOrder(request):
     body_unicode = request.body.decode('utf-8')
-    body_data = json.loads(body_unicode)
-    body_data = json.loads(body_data)
-    for key in body_data:
-        orderValues = list(key.values())
-        itemId = orderValues[1]
-        itemSize = orderValues[2]
-        itemCost = orderValues[3]
-        itemCategory = orderValues[4]
-        itemName = orderValues[5]
-        print(orderValues[6])
-        print(itemId)
-        print(itemSize)
-        print(itemCost)
-        print(itemCategory)
-        # orderObject = json.loads(key, object_hook=lambda d: namedtuple('X',d.keys())(*d.values()))
-    return HttpResponse("Order Recieved")
+    orderData = json.loads(body_unicode)
+    try:
+        newOrder = models.submitedOrder(orderItems=orderData['order'], totalPrice=orderData['total'],orderedBy=orderData['user'])
+        newOrder.save()
+    except:
+        return HttpResponse(0)
+    return HttpResponse(1)
 
-def orderComplete(request):
-    template = loader.get_template('orders/orderComplete.html')
-    context = {}
+@login_required
+def orderStatus(request, user):
+    template = loader.get_template('orders/orderStatus.html')
+    orders = mark_safe(serializers.serialize('json',models.submitedOrder.objects.filter(orderedBy=user)))
+    context = {
+        'orderer': user,
+        'orders': orders
+    }
     return HttpResponse(template.render(context, request))
 
+@login_required
 def getItemInfo(request):
     requestValue = request.body.decode('utf-8')
     item = models.Menu.objects.filter(pk=requestValue)
-    item = mark_safe(serializers.serialize("json", item))
+    item = serializers.serialize("json", item)
     return HttpResponse(item)
+
+def unauthorized(request):
+    return HttpResponse('Unauthorized', status=401)

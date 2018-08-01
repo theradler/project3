@@ -17,6 +17,7 @@
   var csrfToken = "{{ csrf_token }}";
   var finalOrder=[];
   var orderValid = true;
+  var user = "{{ user.username }}";
   </script>
 <div class="container" id="itemContainerSection">
     {% csrf_token %}
