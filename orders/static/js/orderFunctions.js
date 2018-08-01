@@ -63,8 +63,8 @@ function buildSizeForm(cost, nameOfOption) {
   input.setAttribute('name', nameOfOption);
   input.setAttribute('value', cost);
   input.setAttribute('class', "sizeForm");
-  input.setAttribute('id',('radio' + nameOfOption));
-  input.setAttribute('onclick', 'onClickSize(' + nameOfOption +')');
+  input.setAttribute('id', ('radio' + nameOfOption));
+  input.setAttribute('onclick', 'onClickSize(' + nameOfOption + ')');
 
   var label = document.createElement('label');
   label.setAttribute('class', 'form-check-label');
@@ -79,12 +79,43 @@ function buildSizeForm(cost, nameOfOption) {
 
 function onClickSize(optionSelected) {
   var sizeOptions = document.getElementsByClassName('sizeForm');
-  for (var i=0; i < sizeOptions.length; i++) {
-    if(sizeOptions[i].name != optionSelected.name) {
+  for (var i = 0; i < sizeOptions.length; i++) {
+    if (sizeOptions[i].name != optionSelected.name) {
       sizeOptions[i].checked = false;
     }
   }
 
+}
+
+function toppingsValidator() {
+  resetError();
+    document.getElementById('submitOrderButton').disabled=false;
+  var toppingsSelector = document.getElementsByClassName('form-check-input');
+  var numberOfToppings = 0;
+  var allowedToppings = itemData[0].fields.numberOfToppings;
+  for (var i = 0; i < toppingsSelector.length; i++) {
+    if (toppingsSelector[i].checked) {
+      numberOfToppings++
+    }
+  }
+  if (numberOfToppings > allowedToppings) {
+    var errorMessage = "You have selected too many options, you can have a total of " + allowedToppings;
+    raiseError(errorMessage);
+    document.getElementById('submitOrderButton').disabled=true;
+  }
+};
+
+function raiseError(errorMessage) {
+  var errorDiv = document.getElementById('orderError')
+  errorDiv.innerHTML = ''
+  errorDiv.innerHTML = errorMessage;
+  errorDiv.style.display = 'block';
+}
+
+function resetError() {
+  var errorSection = document.getElementById('orderError');
+  errorSection.innerHTML = ''
+  errorSection.style.display='none';
 }
 
 function renderToppingsOption(nameOfOption, div) {
@@ -95,6 +126,7 @@ function renderToppingsOption(nameOfOption, div) {
   input.setAttribute('type', 'checkbox');
   input.setAttribute('class', 'form-check-input')
   input.setAttribute('name', nameOfOption);
+  input.setAttribute('onclick', 'toppingsValidator()');
 
   var label = document.createElement('label');
   label.setAttribute('class', 'form-check-label');
@@ -115,15 +147,12 @@ function addAddToOrderButton() {
   //create button
   var button = document.createElement('button');
   button.setAttribute('type', 'submit');
-  button.setAttribute('class', "btn btn-primary");
+  button.setAttribute('class', "btn");
   button.appendChild(document.createTextNode("Add to Order"));
-  button.setAttribute('onclick', "addToOrder()")
+  button.setAttribute('onclick', "addToOrder()");
+  button.setAttribute('id', 'submitOrderButton');
 
   itemSection.appendChild(button);
-}
-
-function toppingsSelectionValidator() {
-
 }
 
 function getNumberOfToppingsSelected() {
@@ -140,14 +169,19 @@ function getNumberOfToppingsSelected() {
 function addToOrder() {
   var cost;
   var itemProperties = itemData[0].fields;
+  resetError();
   if (itemData[0].fields.defaultPrice) {
     cost = itemData[0].fields.defaultPrice;
-    var size=" ";
-  }
-  else {
+    var size = " ";
+  } else {
     var size = getSize();
+    if (!size) {
+      raiseError('You Must Select a Size')
+      return;
+    }
     cost = size.cost;
     size = size.name;
+
   }
 
   var toppings = getToppings();
@@ -158,7 +192,7 @@ function addToOrder() {
 
 }
 
-function buildOrderItem(menu_id, size, cost, category, name, toppings){
+function buildOrderItem(menu_id, size, cost, category, name, toppings) {
   var orderItem = {
     'id': guid(),
     'menu_id': menu_id,
@@ -225,10 +259,12 @@ function loadOrderForEdit() {
   }
 
 }
+
 function removeItemFromOrder() {
   removeItem();
   window.location.href = '/shoppingCart';
 }
+
 function removeItem() {
   var updatedLocalShoppingCart = [];
   updatedLocalShoppingCart = localShoppingCart;
@@ -239,14 +275,14 @@ function removeItem() {
   })
   localStorage.setItem('shoppingCart', JSON.stringify(updatedLocalShoppingCart));
 }
-function updateOrder(){
+
+function updateOrder() {
   removeItem();
   var itemProperties = itemData[0].fields;
   if (itemData[0].fields.defaultPrice) {
     cost = itemData[0].fields.defaultPrice;
     var size = " ";
-  }
-  else {
+  } else {
     var size = getSize();
     cost = size.cost;
     size = size.name;

@@ -21,14 +21,17 @@
   var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
   document.addEventListener("DOMContentLoaded", init);
 </script>
+<div class="container" >
+<div class="alert alert-danger" id="orderError" style="display:none;margin-top:20px;"></div>
+</div>
 <div class="container" id="itemContainerSection">
 </div>
 <div class="container" id="editItemSubmit">
     <div class="row" id="button row">
         <div class="col">
-        <input type="button" value="Submit Order Update" onclick="updateOrder()">
-            <input type="button" value="Cancel Order Update" onclick="location.href='/shoppingCart'">
-            <input type="button" value="Remove Item From Order" onclick="removeItemFromOrder()" >
+        <input type="button" value="Submit Order Update" id="submitOrderButton" onclick="updateOrder()" class="btn">
+            <input type="button" value="Cancel Order Update" onclick="location.href='/shoppingCart'" class="btn">
+            <input type="button" value="Remove Item From Order" onclick="removeItemFromOrder()" class="btn">
         </div>
     </div>
 </div>

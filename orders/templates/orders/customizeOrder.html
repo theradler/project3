@@ -17,6 +17,9 @@
   document.addEventListener("DOMContentLoaded", init);
    var itemData = {{ item }}
 </script>
-<div class="container" id="itemContainerSection">
+<div class="container" >
+<div class="alert alert-danger" id="orderError" style="display:none;margin-top:20px;"></div>
+</div>
+<div class="container" id="itemContainerSection" style="margin-top:10px;">
 </div>
 {% endblock %}
