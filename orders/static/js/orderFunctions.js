@@ -63,6 +63,9 @@ function buildSizeForm(cost, nameOfOption) {
   input.setAttribute('name', nameOfOption);
   input.setAttribute('value', cost);
   input.setAttribute('class', "sizeForm");
+  input.setAttribute('id',('radio' + nameOfOption));
+  input.setAttribute('onclick', 'onClickSize(' + nameOfOption +')');
+
   var label = document.createElement('label');
   label.setAttribute('class', 'form-check-label');
   label.setAttribute('for', nameOfOption);
@@ -72,6 +75,16 @@ function buildSizeForm(cost, nameOfOption) {
   div.appendChild(input);
   div.appendChild(label);
   return div
+}
+
+function onClickSize(optionSelected) {
+  var sizeOptions = document.getElementsByClassName('sizeForm');
+  for (var i=0; i < sizeOptions.length; i++) {
+    if(sizeOptions[i].name != optionSelected.name) {
+      sizeOptions[i].checked = false;
+    }
+  }
+
 }
 
 function renderToppingsOption(nameOfOption, div) {
