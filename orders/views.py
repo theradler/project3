@@ -148,5 +148,14 @@ def getItemInfo(request):
     item = serializers.serialize("json", item)
     return HttpResponse(item)
 
+@login_required
+def orderManagement(request):
+    orders = mark_safe(serializers.serialize('json', models.submitedOrder.objects.all()));
+    template = loader.get_template('orders/orderManagement.html')
+    context = {
+        'orders': orders
+    }
+    return HttpResponse(template.render(context, request))
+
 def unauthorized(request):
     return HttpResponse('Unauthorized', status=401)

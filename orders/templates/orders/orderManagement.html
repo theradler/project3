@@ -1,0 +1,34 @@
+{% extends "orders\base.html" %} {% block content %}
+<style>
+    #footer{
+    position:fixed;
+    bottom:0;
+    width:100%;
+}
+</style>
+<script src="/static/js/orderManagementFunctions.js"></script>
+<script type="text/javascript">
+  function init() {
+  var orders = {{ orders }};
+  console.log(orders);
+  renderOrderStatus(orders);
+  var isStaff = "{{ user.is_staff }}";
+  }
+  document.addEventListener("DOMContentLoaded", init);
+</script>
+<div clas="container">
+    <h1>Your Order Status</h1>
+</div>
+<table class="table" id="orderStatusTable">
+    <thead>
+    <tr>
+        <th scope="col">Order</th>
+        <th scope="col">Total</th>
+        <th scope="col">Order Submitted</th>
+        <th scope="col">Complete Order</th>
+    </tr>
+    </thead>
+</table>
+
+{{ user.is_staff }}
+{% endblock %}

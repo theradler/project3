@@ -19,5 +19,6 @@ urlpatterns = [
     path('getItemInfo/', views.getItemInfo, name="getItemInfo"),
     path('submitOrder/', views.submitOrder, name="submitOrder"),
     path('unauthorized/', views.unauthorized, name="unauthorized"),
+    path('orderManagement/', views.orderManagement, name="orderManagement"),
 
 ]

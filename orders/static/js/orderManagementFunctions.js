@@ -1,18 +1,13 @@
-function noPeeking(loggedInUser, orderUser) {
-  if (loggedInUser != orderUser) {
-    window.location.href = '/unauthorized/'
-  }
-}
-
 function renderOrderStatus(order) {
   for (var i = 0; i < order.length; i++) {
-    createOrderTableEntry(order[i].fields.orderItems, order[i].fields.totalPrice, order[i].fields.orderTime, order[i].fields.orderComplete);
+    console.log(order);
+    createOrderTableEntry(order[i].fields.orderItems, order[i].fields.totalPrice, order[i].fields.orderTime, order[i].fields.orderComplete, order[i].pk);
   }
 
 }
 
 
-function createOrderTableEntry(order, total, submitTime, status) {
+function createOrderTableEntry(order, total, submitTime, status, orderPK) {
 
   var table = document.getElementById('orderStatusTable')
   var row = table.insertRow(-1);
@@ -20,11 +15,13 @@ function createOrderTableEntry(order, total, submitTime, status) {
   var cell2 = row.insertCell(1);
   var cell3 = row.insertCell(2);
   var cell4 = row.insertCell(3);
+  var cell5 = row.insertCell(4);
 
   cell1.innerHTML = buildOrderString(order)
   cell2.innerHTML = "$" + total;
   cell3.innerHTML = submitTime;
   cell4.innerHTML = status;
+  cell5.innerHTML = markOrderAsCompleteButton(orderPK);
 
 
 }
@@ -49,4 +46,13 @@ function buildOrderString(orders) {
     }
   }
   return orderString
+}
+
+function markOrderAsCompleteButton(orderPK) {
+  var button = '<button onclick="mrkOrderAsComplete(' + orderPK + ')">Mark Order as Complete</button>'
+  return button
+}
+
+function markOrderAsComplete() {
+
 }
