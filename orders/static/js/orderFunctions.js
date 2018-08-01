@@ -48,10 +48,11 @@ function renderToppingsForm(item) {
   div.setAttribute('class', 'form-check');
 
   //loop through all toppings delived to page and render them
-  for (i = 0; i < item.length; i++) {
-    div = renderToppingsOption(item[i].fields.name, div)
+  for (var i = 0; i < item.length; i++) {
+    div = renderToppingsOption(item[i].fields.name, div, i)
   }
   itemSection.appendChild(div);
+
   itemSection.appendChild(hr);
 }
 
@@ -118,7 +119,7 @@ function resetError() {
   errorSection.style.display = 'none';
 }
 
-function renderToppingsOption(nameOfOption, div, price) {
+function renderToppingsOption(nameOfOption, div, count) {
   var input = document.createElement('input');
   input.setAttribute('type', 'checkbox');
   input.setAttribute('class', 'form-check-input')
@@ -133,6 +134,10 @@ function renderToppingsOption(nameOfOption, div, price) {
   //combine and return div
   div.appendChild(input);
   div.appendChild(label);
+  console.log(parseInt(count % 5));
+  if ((parseInt(count) % 5 == 0 && count != 0)){
+    div.appendChild(document.createElement('br'));
+  }
 
   return div
 

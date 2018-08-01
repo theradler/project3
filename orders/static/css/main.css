@@ -537,7 +537,9 @@ ul {
 }
 .form-check-label {
 padding-left: 15px;
+padding-right: 10px;
 }
+
 .form-horizontal .checkbox {
     margin-bottom: 0;
 }
