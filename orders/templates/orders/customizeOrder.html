@@ -8,14 +8,13 @@
 <script src="/static/js/orderFunctions.js"></script>
 <script type="text/javascript">
   function init() {
-    var itemData = {{ item }}
-    var availableToppings = {{ availableToppings }}
     renderItem(itemData[0].fields);
     renderToppingsForm(availableToppings);
     addAddToOrderButton();
   }
-  document.addEventListener("DOMContentLoaded", init);
    var itemData = {{ item }}
+   var availableToppings = {{ availableToppings }}
+   document.addEventListener("DOMContentLoaded", init);
 </script>
 <div class="container" >
 <div class="alert alert-danger" id="orderError" style="display:none;margin-top:20px;"></div>

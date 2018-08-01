@@ -89,7 +89,7 @@ function onClickSize(optionSelected) {
 
 function toppingsValidator() {
   resetError();
-    document.getElementById('submitOrderButton').disabled=false;
+  document.getElementById('submitOrderButton').disabled = false;
   var toppingsSelector = document.getElementsByClassName('form-check-input');
   var numberOfToppings = 0;
   var allowedToppings = itemData[0].fields.numberOfToppings;
@@ -101,7 +101,7 @@ function toppingsValidator() {
   if (numberOfToppings > allowedToppings) {
     var errorMessage = "You have selected too many options, you can have a total of " + allowedToppings;
     raiseError(errorMessage);
-    document.getElementById('submitOrderButton').disabled=true;
+    document.getElementById('submitOrderButton').disabled = true;
   }
 };
 
@@ -115,13 +115,10 @@ function raiseError(errorMessage) {
 function resetError() {
   var errorSection = document.getElementById('orderError');
   errorSection.innerHTML = ''
-  errorSection.style.display='none';
+  errorSection.style.display = 'none';
 }
 
-function renderToppingsOption(nameOfOption, div) {
-  // var div = document.createElement('div');
-  // div.setAttribute('class', 'form-check');
-
+function renderToppingsOption(nameOfOption, div, price) {
   var input = document.createElement('input');
   input.setAttribute('type', 'checkbox');
   input.setAttribute('class', 'form-check-input')
@@ -179,7 +176,13 @@ function addToOrder() {
       raiseError('You Must Select a Size')
       return;
     }
-    cost = size.cost;
+    var addOnPrice = getAddOnTotal();
+    if (addOnPrice) {
+      cost = size.cost;
+      cost = parseFloat(cost) + parseFloat(addOnPrice);
+    } else {
+      cost = size.cost;
+    }
     size = size.name;
 
   }
@@ -187,10 +190,26 @@ function addToOrder() {
   var toppings = getToppings();
   var orderItem = buildOrderItem(itemData[0].pk, size, cost, itemProperties.category, itemProperties.name, toppings);
   updateShoppingCart(orderItem);
-  console.log(orderItem);
   window.location.href = '/shoppingCart';
 
 }
+
+function getAddOnTotal() {
+  var toppingsOption = document.getElementsByClassName("form-check-input")
+  var toppingCost = 0;
+  for (var i = 0; i < toppingsOption.length; i++) {
+    if (toppingsOption[i].checked == true) {
+      for (var x = 0; x < availableToppings.length; x++) {
+        if (toppingsOption[i].name == availableToppings[x].fields.name) {
+          toppingCost = parseFloat(toppingCost) + parseFloat(availableToppings[x].fields.price);
+        }
+      }
+    }
+
+  }
+  return toppingCost;
+}
+
 
 function buildOrderItem(menu_id, size, cost, category, name, toppings) {
   var orderItem = {
