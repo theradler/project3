@@ -89,7 +89,7 @@ function submitOrderToServer() {
   var submitOrderBody = {
     'user': user,
     'total': totalCost,
-    'order': finalOrder
+    'order': JSON.stringify(finalOrder)
   }
   var url = '/submitOrder/'
   var xHttp = new XMLHttpRequest();

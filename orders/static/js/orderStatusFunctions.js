@@ -5,9 +5,10 @@ function noPeeking(loggedInUser, orderUser) {
 }
 
 function renderOrderStatus(order) {
-  order = order[0].fields;
-  console.log(order.orderTime);
-  createOrderTableEntry(order.orderItems, order.totalPrice, order.orderTime, order.orderComplete);
+  for (var i = 0; i < order.length; i++) {
+    createOrderTableEntry(order[i].fields.orderItems, order[i].fields.totalPrice, order[i].fields.orderTime, order[i].fields.orderComplete);
+  }
+
 }
 
 
@@ -30,9 +31,19 @@ function createOrderTableEntry(order,total, submitTime, status) {
 
 
 function buildOrderString(orders) {
-  console.log(orders.slice(1, -1));
-var jsonOrders = JSON.parse(orders.slice(1, -1));
-console.log(jsonOrders);
+var jsonOrders = JSON.parse(orders);
+var orderString = "";
 
-  return 'order'
+for (var i =0; i < jsonOrders.length; i ++) {
+  var localOrder = jsonOrders[i];
+  for (var i=0; i < localOrder[i].toppings.length; i++) {
+    toppings = toppings + localOrders[i].toppings[i] + ","
+  }
+  console.log(toppings);
+  orderString = orderString + localOrder.size + " " + localOrder.name + " " + localOrder.category + "<br>"
+
+}
+console.log(orderString);
+
+  return orderString
 }
