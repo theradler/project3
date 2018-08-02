@@ -1,9 +1,10 @@
+//if you are not the user, you can't look at there orders, bounces to a 401 error
 function noPeeking(loggedInUser, orderUser) {
   if (loggedInUser != orderUser) {
     window.location.href = '/unauthorized/'
   }
 }
-
+//renders the table with all order functions
 function renderOrderStatus(order) {
   for (var i = 0; i < order.length; i++) {
     createOrderTableEntry(order[i].fields.orderItems, order[i].fields.totalPrice, order[i].fields.orderTime, order[i].fields.orderComplete);
@@ -11,7 +12,7 @@ function renderOrderStatus(order) {
 
 }
 
-
+//builds table
 function createOrderTableEntry(order, total, submitTime, status) {
 
   var table = document.getElementById('orderStatusTable')
@@ -28,6 +29,7 @@ function createOrderTableEntry(order, total, submitTime, status) {
 
 
 }
+//takes the order status and returns a nice(r) message
 function returnStatusMessage(status){
   if(status) {
     return "Order Complete"
@@ -35,7 +37,7 @@ function returnStatusMessage(status){
     return "Order Pending"
   }
 }
-
+//transforms the order json blob I store in the db to a human readable string
 function buildOrderString(orders) {
   var jsonOrders = JSON.parse(orders);
   var orderString = "";

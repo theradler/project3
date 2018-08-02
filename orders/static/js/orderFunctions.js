@@ -1,16 +1,19 @@
+
+
+//renders the title & size forms
 function renderItem(item) {
   var itemSection = document.getElementById('itemContainerSection');
-  renderPizzaItemTitle(item, itemSection);
+  renderTitle(item, itemSection);
   renderSizeForm(item, itemSection);
 }
 
-
-function renderPizzaItemTitle(item, itemToAppend) {
+// renders title based on data from server
+function renderTitle(item, itemToAppend) {
   var title = document.createElement('h2');
   title.appendChild(document.createTextNode(toCamelCase(item.name) + " " + toCamelCase(item.category)));
   itemToAppend.appendChild(title);
 }
-
+// creates size form, if item has not size it does not
 function renderSizeForm(item, itemToAppend) {
 
   if (item.largePrice == null) {
@@ -34,6 +37,7 @@ function renderSizeForm(item, itemToAppend) {
   itemToAppend.appendChild(formDiv);
 }
 
+//renders all the toppings
 function renderToppingsForm(item) {
   if (item.length == 0) {
     return
@@ -55,7 +59,7 @@ function renderToppingsForm(item) {
 
   itemSection.appendChild(hr);
 }
-
+//builder function for the size form
 function buildSizeForm(cost, nameOfOption) {
   var div = document.createElement('div');
   div.setAttribute('class', "form-check form-check-inline");
@@ -77,7 +81,7 @@ function buildSizeForm(cost, nameOfOption) {
   div.appendChild(label);
   return div
 }
-
+//stops users from selecting two size, if one is selcted deslects the others
 function onClickSize(optionSelected) {
   var sizeOptions = document.getElementsByClassName('sizeForm');
   for (var i = 0; i < sizeOptions.length; i++) {
@@ -87,7 +91,7 @@ function onClickSize(optionSelected) {
   }
 
 }
-
+//validates that they don't have too many toppings on their order and returns and error if they do, also locks down submit button
 function toppingsValidator() {
   resetError();
   document.getElementById('submitOrderButton').disabled = false;
@@ -105,7 +109,7 @@ function toppingsValidator() {
     document.getElementById('submitOrderButton').disabled = true;
   }
 };
-
+//utility function for raising erros
 function raiseError(errorMessage) {
   var errorDiv = document.getElementById('orderError')
   errorDiv.innerHTML = ''
@@ -113,12 +117,13 @@ function raiseError(errorMessage) {
   errorDiv.style.display = 'block';
 }
 
+//utility function for dismissing errors
 function resetError() {
   var errorSection = document.getElementById('orderError');
   errorSection.innerHTML = ''
   errorSection.style.display = 'none';
 }
-
+//builder function for toppings, every 5th topping it inserts a line break, first time using modulo!
 function renderToppingsOption(nameOfOption, div, count) {
   var input = document.createElement('input');
   input.setAttribute('type', 'checkbox');
@@ -142,7 +147,7 @@ function renderToppingsOption(nameOfOption, div, count) {
   return div
 
 }
-
+//builds the add to order button and places it on page
 function addAddToOrderButton() {
   var itemSection = document.getElementById('itemContainerSection');
 
@@ -156,7 +161,7 @@ function addAddToOrderButton() {
 
   itemSection.appendChild(button);
 }
-
+//returns the number of toppings selected at point of order submission
 function getNumberOfToppingsSelected() {
   var selections = document.getElementsByClassName("form-check-input")
   var count = 0;
@@ -167,7 +172,7 @@ function getNumberOfToppingsSelected() {
   }
   return count;
 }
-
+//acutally submits the order, does validation on size and adds the addon item cost to the total cost
 function addToOrder() {
   var cost;
   var itemProperties = itemData[0].fields;
@@ -198,7 +203,7 @@ function addToOrder() {
   window.location.href = '/shoppingCart';
 
 }
-
+//calcualtes the cost of add ons selected
 function getAddOnTotal() {
   var toppingsOption = document.getElementsByClassName("form-check-input")
   var toppingCost = 0;
@@ -215,7 +220,7 @@ function getAddOnTotal() {
   return toppingCost;
 }
 
-
+//builder function that returns a json order item
 function buildOrderItem(menu_id, size, cost, category, name, toppings) {
   var orderItem = {
     'id': guid(),
@@ -230,7 +235,7 @@ function buildOrderItem(menu_id, size, cost, category, name, toppings) {
 
 }
 
-
+// returns the users selected size and the cost of that size. used at checkout point
 function getSize() {
   var size = document.getElementsByClassName('sizeForm');
   for (i = 0; i < size.length; i++) {
@@ -244,7 +249,7 @@ function getSize() {
     }
   }
 }
-
+// adds selected toppings to list, that is then returned to build the order item
 function getToppings() {
   var toppingsList = [];
   var toppingSelection = document.getElementsByClassName('form-check-input');
@@ -255,7 +260,7 @@ function getToppings() {
   }
   return toppingsList;
 }
-
+//submits the order item to updatad shopping cart, given more time would have liked this to submit to the server instead of local memory
 function updateShoppingCart(orderItem) {
   var shoppingCart = JSON.parse(localStorage.getItem('shoppingCart'));
   if (!shoppingCart) {
@@ -265,6 +270,7 @@ function updateShoppingCart(orderItem) {
   localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart))
 }
 
+//this is used on the edit order, loads the configured order so user can make changes
 function loadOrderForEdit() {
   var orderForEdit = localShoppingCart.find(obj => {
     return obj.id == orderId
@@ -283,12 +289,12 @@ function loadOrderForEdit() {
   }
 
 }
-
+//removes the current order in context from the local shopping cart
 function removeItemFromOrder() {
   removeItem();
   window.location.href = '/shoppingCart';
 }
-
+//utility function that does the acutal removing, used in multiple places
 function removeItem() {
   var updatedLocalShoppingCart = [];
   updatedLocalShoppingCart = localShoppingCart;
@@ -299,7 +305,7 @@ function removeItem() {
   })
   localStorage.setItem('shoppingCart', JSON.stringify(updatedLocalShoppingCart));
 }
-
+//removes current iteration of the order and then inserts updated one
 function updateOrder() {
   removeItem();
   var itemProperties = itemData[0].fields;
@@ -317,7 +323,7 @@ function updateOrder() {
   window.location.href = '/shoppingCart';
 }
 
-
+//utility for formatting
 function toCamelCase(str) {
   str = str.split(" ");
 
@@ -327,7 +333,7 @@ function toCamelCase(str) {
 
   return str.join(" ");
 }
-
+//generates guids
 function guid() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)

@@ -1,3 +1,4 @@
+//reused stuff from shopping cart, probably should have shared the function across both pages
 function renderOrderStatus(order) {
   for (var i = 0; i < order.length; i++) {
     createOrderTableEntry(order[i].fields.orderItems, order[i].fields.totalPrice, order[i].fields.orderTime, order[i].fields.orderComplete, order[i].pk, order[i].fields.orderedBy);
@@ -5,7 +6,7 @@ function renderOrderStatus(order) {
 
 }
 
-
+//builds the table
 function createOrderTableEntry(order, total, submitTime, status, orderPK, orderedBy) {
 
   var table = document.getElementById('orderTableBody');
@@ -26,7 +27,7 @@ function createOrderTableEntry(order, total, submitTime, status, orderPK, ordere
 
 
 }
-
+//converts status to nice string
 function returnStatusMessage(status){
   if(status) {
     return "Order Complete"
@@ -34,7 +35,7 @@ function returnStatusMessage(status){
     return "Order Pending"
   }
 }
-
+//builds the orders
 function buildOrderString(orders) {
   var jsonOrders = JSON.parse(orders);
   var orderString = "";
@@ -54,12 +55,12 @@ function buildOrderString(orders) {
   }
   return orderString
 }
-
+//allows staff to mark orders as complete
 function markOrderAsCompleteButton(orderPK) {
   var button = '<button onclick="markOrderAsComplete(' + orderPK + ')">Mark Order as Complete</button>'
   return button
 }
-
+//ajax that actually changes the order status, submits to server which makes changes and passes to values down 
 function markOrderAsComplete(orderPK) {
   var url = '/markOrderAsComplete/' + orderPK;
   var xHttp = new XMLHttpRequest();

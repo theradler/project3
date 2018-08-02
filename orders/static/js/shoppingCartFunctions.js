@@ -1,3 +1,4 @@
+//fills out the shopping cart
 function populateShoppingCart(orders) {
   for (var i = 0; i < orders.length; i++) {
     var localOrder = orders[i]
@@ -5,7 +6,7 @@ function populateShoppingCart(orders) {
     createOrderTableEntry((localOrder.category + " " + localOrder.name), localOrder.size, localOrder.cost, toppings, localOrder.id, localOrder.menu_id)
   }
 }
-
+//creates the table for the order
 function createOrderTableEntry(item, size, price, toppings, id, menu_id) {
   if (!toppings) {
     toppings = " ";
@@ -29,7 +30,7 @@ function createOrderTableEntry(item, size, price, toppings, id, menu_id) {
   cell5.innerHTML = '<a href="/editOrder/' + id + "/" + menu_id + '">edit</a>';
 
 }
-
+//converts list of toppings into a nice string for display
 function presentToppings(toppings) {
   var toppingString = "";
   if (toppings.length == 0) {
@@ -42,7 +43,7 @@ function presentToppings(toppings) {
   return toppingString;
 }
 
-
+//gets the order total from global orders var
 function getTotal(orders) {
   var totalCost = 0;
   for (var i = 0; i < orders.length; i++) {
@@ -50,7 +51,7 @@ function getTotal(orders) {
   }
   renderTotal(totalCost);
 }
-
+//display the total on the screen
 function renderTotal(totalCost) {
   var totalField = document.getElementById('totalField')
   var total = document.createElement('h3');
@@ -58,7 +59,7 @@ function renderTotal(totalCost) {
   totalField.appendChild(total);
 }
 
-
+//submits the orders and dismisses the errors, resets on error conditon
 function submitOrder() {
   var errorElement = document.getElementById('shoppingCartErrors');
   errorElement.innerHTML = '';
@@ -73,7 +74,7 @@ function submitOrder() {
     finalOrder = [];
   }
 }
-
+//get the total at checkout
 function returnTotalCostAtCheckout(){
   var localShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'))
   var totalCost = 0;
@@ -83,7 +84,7 @@ function returnTotalCostAtCheckout(){
   return totalCost
 }
 
-
+//send the order to server via ajax, ensures that order is submitted then proceeds to order status page
 function submitOrderToServer() {
   var totalCost = returnTotalCostAtCheckout();
   var submitOrderBody = {
@@ -111,7 +112,7 @@ function submitOrderToServer() {
   xHttp.send(JSON.stringify(submitOrderBody));
 }
 
-
+// validates the order is legit by getting info from server and compares it to order items, some fun ajax
 function validateAndPlaceOrder(orderItem) {
   var url = '/getItemInfo/'
   var xHttp = new XMLHttpRequest();
@@ -130,7 +131,7 @@ function validateAndPlaceOrder(orderItem) {
   xHttp.setRequestHeader("X-CSRFToken", csrfToken);
   xHttp.send(orderItem.menu_id);
 }
-
+//validates that they haven't added more toppings than allowed
 function orderValidator(orderItem, baseItem) {
   var OrderIsValid = true
   if (!numberOfToppings(orderItem.toppings.length, baseItem.numberOfToppings)) {
@@ -140,7 +141,7 @@ function orderValidator(orderItem, baseItem) {
   }
   return OrderIsValid;
 }
-
+//displays error on shoppingCart page
 function shoppingCartError(errorMessage) {
   var error = document.createElement('strong');
   var errorElement = document.getElementById('shoppingCartErrors')
@@ -148,7 +149,7 @@ function shoppingCartError(errorMessage) {
   errorElement.appendChild(error);
   errorElement.style.display = 'block';
 }
-
+//simple comparison operator
 function numberOfToppings(allowedToppings, toppingsOnOrder) {
   if (allowedToppings <=
     toppingsOnOrder) {
@@ -158,7 +159,7 @@ function numberOfToppings(allowedToppings, toppingsOnOrder) {
   }
 }
 
-
+//as always 
 function toCamelCase(str) {
   str = str.split(" ");
 

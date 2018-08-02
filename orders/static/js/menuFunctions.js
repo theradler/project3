@@ -1,3 +1,4 @@
+//at page load we generate the category sections based on infro from server
 function loadCategory(menuData) {
   var tempCategoryArray = [];
   for (i = 0; i < menuData.length; i++) {
@@ -8,7 +9,7 @@ function loadCategory(menuData) {
     }
   }
 }
-
+//creates the html element in which all the order items sit
 function createMenuElement(categoryName) {
   var element = document.getElementById('bodyMenuSection');
   var title = document.createElement('h3');
@@ -36,7 +37,8 @@ function createMenuElement(categoryName) {
   element.appendChild(headerDiv);
   element.appendChild(menuItemSection);
 }
-
+//this beast of function is mostly to generate the complex html necessary for the card based menu. Instead of hardcoding automatically generate these elements so
+//that any item added into the menu table will automatically be generated
 function loadMenuItems(menuData) {
   for (i = 0; i < menuData.length; i++) {
     var tempItem = menuData[i].fields;
@@ -91,7 +93,7 @@ function loadMenuItems(menuData) {
       addToOrderButton.appendChild(document.createTextNode('Add to Order'))
       addToOrderForm.appendChild(addToOrderButton);
 
-      //append Price object to col body
+      //append Price object to col body, adjusts for single price options
       if (!tempItem.defaultPrice) {
       cardBody.appendChild(smallPriceSpan);
       cardBody.appendChild(smallPriceValue);
@@ -107,11 +109,7 @@ function loadMenuItems(menuData) {
   }
 };
 
-function renderMenu() {
-  console.log("");
-  document.getElementById("menu").innerHTML = "on page load worked";
-}
-
+//utility function for camelCase, really should have made a generic js utils folder cause I use this everywhere 
 function toCamelCase(str) {
   str = str.split(" ");
 
